@@ -4,17 +4,33 @@ let numAnt = null;
 let opAtual = null;
 let numPost = null;
 
+
 function inserirNum(num){
-    if(numAnt && opAtual === null){
-        numAnt = num;
-    }else if(numAnt && opAtual !== null){
-        numPost = num;
+    if (novoNum) {
+        visor.textContent += num;
+        novoNum = false;
+    } else {
+        visor.textContent += num;
     }
-    visor.textContent += num;
-    novoNum = false;
-}
+
+    if(opAtual == null){
+        numAnt = parseFloat(visor.textContent.replace(',', '.')); 
+    }
+
+    
+
+    if (opAtual !== null) {
+        numPost = parseFloat(visor.textContent.replace(',', '.')); 
+    }
+  }
 
 function inserirOperador(op){
+    if(numAnt === null && visor.textContent.trim()!== ''){
+        numAnt = parseFloat(visor.textContent.replace(',','.'));
+    }else if (numPost !==null){
+        resultado();
+        numAnt = parseFloat(visor.textContent.replace(',', '.'));
+    }
    opAtual = op;
    visor.textContent += " " + op + " ";
    novoNum= true;
@@ -33,59 +49,64 @@ function apagarDigito(){
 }
 
 function inverterSinal(){
-    visor.textContent = visor.textContent*(-1);
-    // melhorar isso aqui 
+
+    let valor = parseFloat(visor.textContent.replace(',', '.'));
+    if (!isNaN(valor)) {
+        valor *= -1;
+        visor.textContent = valor.toString().replace('.', ',');
+        if (opAtual === null) {
+            numAnt = valor;
+        } else {
+            numPost = valor;
+        }
+    }
 }
 
 function virgula(){
-
-    if(novoNum == true){
-        if(numAnt !== null){
-
-        }
+    if (novoNum) {
+        visor.textContent += "0,";
+        novoNum = false;
+    } else if (!visor.textContent.includes(',')) {
+        visor.textContent += ",";
     }
-    
+}
+
+function resultado (){
+    if(numAnt !== null && numPost !== null || opAtual !== null){
+
+        let resultado = 0;
+         
+        switch(opAtual){
+            case '+':
+                resultado = numAnt + numPost;
+                break;
+            case '-':
+                resultado = numAnt - numPost;
+                break;
+            case '/':
+                if(numPost === 0){
+                    alert('Error: Divisão por zero é impossível!');
+                    clean();
+                    return;
+                }
+                resultado = numAnt / numPost;
+                break;
+            case '*':
+                resultado = numAnt * numPost;
+                break;
+        }
+
+        visor.textContent = resultado.toString().replace('.',',');
+        numAnt = resultado;
+        numPost =null;
+        opAtual = null;
+        novoNum = false;
+    }
 }
 
 
-/*
-- se for o numAnt (que está sendo analisado) então o novoNum é true, ou seja, esse numero sendo inserido é o numero novo 
 
-- se numAnt  diferente de null
-    se numAnt == 0 -> "0,"
-    se numAnt !== 0 -> verifica se há virgula
-      se sim -> não põe
-       se não -> +","
-
-
-       
-
-- varre o numAnt para ver se há virgula,
-  se sim -> não põe
-  se não ->
-      - varrer o numAnt para saber se há digito
-          se for diferente de zero -> põe +","
-          se for igual a zero -> põe "0,"
-
-
-*/
-
-
-/*
-function virgula()
-
-cada conjunto de números antes do operador é uma unidade de números 
-
-verificar se nessa unidade de número há virgulas
-
-se sim → não põe vírgula
-
-se não → 
-
-verificar se há algum número nessa unidade
-
-se sim → põe “0,”
-
-se não → põe “,”
-
-*/
+// não esta armazenando o valor após o operador, o numPost está armazenando com o numAnt
+// não aceita dois numeros com virgulas (trocar visor com numAtual)
+// trocar numPost por NumAtual
+// ta aceitando 0, + etc
