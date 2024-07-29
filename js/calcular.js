@@ -1,47 +1,59 @@
 let visor = document.getElementById('visor');
+let visorMemoria = document.getElementById('visorMemoria');
 let novoNum = true;
-let numAnt = null;
+let numAnterior = null;
 let opAtual = null;
-let numPost = null;
+let numAtual = null;
 
 
 function inserirNum(num){
     if (novoNum) {
-        visor.textContent += num;
+        visor.textContent = num;
+        // visorMemoria.textContent += num;
         novoNum = false;
     } else {
         visor.textContent += num;
+        // visorMemoria.textContent += num;
     }
-
-    if(opAtual == null){
-        numAnt = parseFloat(visor.textContent.replace(',', '.')); 
-    }
-
+}
+    
+    numAtual = parseFloat(visor.textContent.replace(',', '.'));
+    
     
 
-    if (opAtual !== null) {
-        numPost = parseFloat(visor.textContent.replace(',', '.')); 
+    if(numAtual !== null && opAtual !== null){
+        numAnterior = numAtual;
+        numAtual = null;
+        novoNum = true;
     }
-  }
+    
 
 function inserirOperador(op){
-    if(numAnt === null && visor.textContent.trim()!== ''){
-        numAnt = parseFloat(visor.textContent.replace(',','.'));
-    }else if (numPost !==null){
-        resultado();
-        numAnt = parseFloat(visor.textContent.replace(',', '.'));
+    let ultimoDigito = visor.textContent.slice(-1);
+    
+    if(ultimoDigito == ","){
+        return;
     }
-   opAtual = op;
-   visor.textContent += " " + op + " ";
-   novoNum= true;
+
+    if(numAnterior !== null && numAtual !== null){
+        resultado();
+        numAtual = parseFloat(visor.textContent.replace(',','.'));
+        numAnterior = null;
+    }
+
+
+    opAtual = op;
+    visorMemoria.textContent += ' ' + op + ' ';
+    novoNum = true;
 }
 
 function clean(){
-    visor.textContent = "";
-    numAnt = null;
-    numPost = null;
+    visor.textContent = '';
+    numAnterior = null;
+    numAtual = null;
     opAtual = null;
     novoNum = true;
+    visorMemoria.textContent = '';
 }
 
 function apagarDigito(){
@@ -54,11 +66,6 @@ function inverterSinal(){
     if (!isNaN(valor)) {
         valor *= -1;
         visor.textContent = valor.toString().replace('.', ',');
-        if (opAtual === null) {
-            numAnt = valor;
-        } else {
-            numPost = valor;
-        }
     }
 }
 
@@ -72,33 +79,33 @@ function virgula(){
 }
 
 function resultado (){
-    if(numAnt !== null && numPost !== null || opAtual !== null){
+    if(numAnterior !== null && numAtual !== null || opAtual !== null){
 
         let resultado = 0;
          
         switch(opAtual){
             case '+':
-                resultado = numAnt + numPost;
+                resultado = numAnterior + numAtual;
                 break;
             case '-':
-                resultado = numAnt - numPost;
+                resultado = numAnterior - numAtual;
                 break;
             case '/':
-                if(numPost === 0){
+                if(numAtual === 0){
                     alert('Error: Divisão por zero é impossível!');
                     clean();
                     return;
                 }
-                resultado = numAnt / numPost;
+                resultado = numAnterior / numAtual;
                 break;
             case '*':
-                resultado = numAnt * numPost;
+                resultado = numAnterior * numAtual;
                 break;
         }
 
         visor.textContent = resultado.toString().replace('.',',');
-        numAnt = resultado;
-        numPost =null;
+        numAnterior = resultado;
+        numAtual =null;
         opAtual = null;
         novoNum = false;
     }
@@ -106,7 +113,10 @@ function resultado (){
 
 
 
-// não esta armazenando o valor após o operador, o numPost está armazenando com o numAnt
-// não aceita dois numeros com virgulas (trocar visor com numAtual)
-// trocar numPost por NumAtual
-// ta aceitando 0, + etc
+/* Problemas atuais  */
+
+/*
+- colocar os valores ja armazenados nas variáveis no visorMenor
+- arrumar função resultado
+
+*/
