@@ -122,4 +122,5 @@ function resultado(op) {
 
 /* Problemas  */
 
-/* arumar função resultado e verificar se os valores estão no parseflot certo */
+//arrumar função resultado e verificar se os valores estão no parseflot certo 
+// quando inverte sinal limpa a tela a parti do op limpando o visorMemoria
