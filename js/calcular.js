@@ -86,17 +86,17 @@ function virgula() {
 
 }
 
-function resultado(op) {
-    if (numAnterior !== null && numAtual !== null || opAtual !== null) {
+function resultado() {
+    if (numAnterior !== null && numAtual !== null && opAtual !== null) {
 
-        let resultado = 0;
+        let resultadoOperacao = 0;
 
-        switch (op) {
+        switch (opAtual) {
             case '+':
-                resultado = numAnterior + numAtual;
+                resultadoOperacao = numAnterior + numAtual;
                 break;
             case '-':
-                resultado = numAnterior - numAtual;
+                resultadoOperacao = numAnterior - numAtual;
                 break;
             case '/':
                 if (numAtual === 0) {
@@ -104,23 +104,24 @@ function resultado(op) {
                     clean();
                     return;
                 }
-                resultado = numAnterior / numAtual;
+                resultadoOperacao = numAnterior / numAtual;
                 break;
             case '*':
-                resultado = numAnterior * numAtual;
+                resultadoOperacao = numAnterior * numAtual;
                 break;
         }
 
-        visor.textContent = resultado.toString().replace('.', ',');
-        numAnterior = resultado;
+        visor.textContent = resultadoOperacao.replace('.', ',');
+        numAnterior = resultadoOperacao;
         numAtual = null;
         opAtual = null;
-        novoNum = false;
+        novoNum = true;
     }
 }
+
 
 
 /* Problemas  */
 
 //arrumar função resultado e verificar se os valores estão no parseflot certo 
-// quando inverte sinal limpa a tela a parti do op limpando o visorMemoria
+// quando inverte sinal limpa a tela a partir do op limpando o visorMemoria
